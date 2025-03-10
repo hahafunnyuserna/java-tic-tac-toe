@@ -106,6 +106,8 @@ class Main
 
         while (winner == null)
         {
+            System.out.println("Player " + turn + ", enter a slot number (1-9).");
+
             int numInput;
            
             try
@@ -136,7 +138,6 @@ class Main
                 }
  
                 printBoard();
-                System.out.println("Player " + turn + ", enter a slot number (1-9).");
                 winner = checkWinner();
             } else {
                 System.out.println("This space is already filled. Try again.");
@@ -145,9 +146,9 @@ class Main
        
         if (winner.equalsIgnoreCase("draw"))
         {
-            System.out.println("It's a draw! Thanks for playing.");
+            System.out.println("It's a draw!.");
         } else {
-            System.out.println("Congratulations! " + winner + "'s have won! Thanks for playing.");
+            System.out.println("Player " + winner + " wins!");
         }
 
     in.close();
