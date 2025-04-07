@@ -4,8 +4,6 @@ import java.util.Scanner;
 
 public class RegularGame
 {    
-    public RecordLogger log = new RecordLogger();
-
     public static Scanner scan;
 
     static void createBoard(char[][] board)
@@ -109,7 +107,7 @@ public class RegularGame
         return false; 
     }
 
-    public void standardGame()
+    public void standardGame(RecordLogger log)
     {
         
 
@@ -177,6 +175,7 @@ public class RegularGame
                     createBoard(board); 
                     System.out.println("\n\nPlayer " + players[i] + " wins!"); 
                     log.addWin(i);
+                    log.printRecord();
                     return;
                 } 
             }
@@ -189,6 +188,7 @@ public class RegularGame
         { 
             System.out.println("It's a draw!");
             log.addTie();
+            log.printRecord();
             return;
         } 
 

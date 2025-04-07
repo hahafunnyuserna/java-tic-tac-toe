@@ -28,6 +28,8 @@ class Main
 
     public static void main(String[] args)
     {
+        RecordLogger log = new RecordLogger();
+
         RegularGame standard = new RegularGame();
         
         boolean repeat = true;
@@ -35,14 +37,17 @@ class Main
         System.out.println("Welcome!");
         while (repeat)
         {
-            standard.standardGame();
+            standard.standardGame(log);
             repeat = repeatGame();
     
         }
 
         scan.close();
 
-        System.out.println("Goodbye.");
+        log.writeFile();
+        System.out.println("Records printed at /app/log.txt.\nGoodbye.");
+
+        
         
     }    
 }
