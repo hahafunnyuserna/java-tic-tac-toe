@@ -109,8 +109,6 @@ public class RegularGame
 
     public void standardGame(RecordLogger log)
     {
-        
-
         scan = new Scanner(System.in);
 
         System.out.println("\n\n\n\n\n");
@@ -143,7 +141,7 @@ public class RegularGame
             { ' ', ' ', ' ' }
         }; 
                                 
-        char players[] = {playerOne, playerTwo}; 
+        char player = playerOne; 
         int row = 0;
         int col = 0;
 
@@ -151,14 +149,13 @@ public class RegularGame
         
         for (turn = 0; turn < 9; turn++)
         { 
-            for (int i = 0; i < 2; i++)
-            {
+        
                 createBoard(board); 
 
                 while (true)
                 { 
-                    row = moveOneCheck(players[i]);
-                    col = moveTwoCheck(players[i]);
+                    row = moveOneCheck(player);
+                    col = moveTwoCheck(player);
 
                     if (board[row][col] != ' ')
                     { 
@@ -168,23 +165,32 @@ public class RegularGame
                     } 
                 } 
 
-                board[row][col] = players[i]; 
+                board[row][col] = player; 
 
-                if (checkWin(board, players[i]))
+                if (checkWin(board, player))
                 { 
                     createBoard(board); 
-                    System.out.println("\n\nPlayer " + players[i] + " wins!"); 
-                    log.addWin(i);
+                    System.out.println("\n\nPlayer " + player + " wins!"); 
+                    
+                    if (player == playerOne)
+                    {
+                        log.addWin(0);
+                    } else {
+                        log.addWin(1);
+                    }
+
                     log.printRecord();
                     return;
                 } 
-            }
+
+                player = (player == playerOne) ? playerTwo : playerOne;
+            
                 
         } 
 
         createBoard(board); 
 
-        if ((turn == 9) && !(checkWin(board, players[0])) && !(checkWin(board, players[1])))
+        if ((turn == 9) && !(checkWin(board, playerOne)) && !(checkWin(board, playerTwo)))
         { 
             System.out.println("It's a draw!");
             log.addTie();
