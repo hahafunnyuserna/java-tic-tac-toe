@@ -33,10 +33,10 @@ public class RecordLogger
 
     public void printRecord()
     {
-        System.out.println("Games - " + games);
-        System.out.println("Player 1 Wins - " + wins[0]);
-        System.out.println("Player 2 Wins - " + wins[1]);
-        System.out.println("Ties - " + ties);
+        System.out.println("Games: " + games);
+        System.out.println("Player 1 Wins: " + wins[0]);
+        System.out.println("Player 2 Wins: " + wins[1]);
+        System.out.println("Ties: " + ties);
     }
 
     public void writeFile()
@@ -44,10 +44,10 @@ public class RecordLogger
         try (FileWriter writer = new FileWriter("log.txt"))
         {
             writer.write("Game Statistics:");
-            writer.write("\nGames - " + games);
-            writer.write("\nPlayer 1 Wins - " + wins[0]);
-            writer.write("\nPlayer 2 Wins - " + wins[1]);
-            writer.write("\nTies - " + ties);
+            writer.write("\nGames: " + games);
+            writer.write("\nPlayer 1 Wins: " + wins[0]);
+            writer.write("\nPlayer 2 Wins: " + wins[1]);
+            writer.write("\nTies: " + ties);
 
         } catch (IOException exception) {
             System.out.println("ERROR: " + exception.getMessage());

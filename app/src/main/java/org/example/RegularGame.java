@@ -178,8 +178,9 @@ public class RegularGame
                     } else {
                         log.addWin(1);
                     }
-
+                    log.addGame();
                     log.printRecord();
+
                     return;
                 } 
 
@@ -194,6 +195,7 @@ public class RegularGame
         { 
             System.out.println("It's a draw!");
             log.addTie();
+            log.addGame();
             log.printRecord();
             return;
         } 
