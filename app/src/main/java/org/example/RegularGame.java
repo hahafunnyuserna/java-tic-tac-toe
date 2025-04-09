@@ -107,7 +107,7 @@ public class RegularGame
         return false; 
     }
 
-    public void standardGame(RecordLogger log)
+    public int standardGame(RecordLogger log, int move)
     {
         scan = new Scanner(System.in);
 
@@ -141,13 +141,22 @@ public class RegularGame
             { ' ', ' ', ' ' }
         }; 
                                 
-        char player = playerOne; 
+        
+        
+        
+        char player = 'v';
         int row = 0;
         int col = 0;
 
-        int turn;
+        int turn = move;
+        if (turn % 2 == 0)
+        {
+            player = playerOne;
+        } else {
+            player = playerTwo;
+        }
         
-        for (turn = 0; turn < 9; turn++)
+        for (turn = turn; turn < (move + 9); turn++)
         { 
         
                 createBoard(board); 
@@ -181,7 +190,7 @@ public class RegularGame
                     log.addGame();
                     log.printRecord();
 
-                    return;
+                    return ((turn + 1) % 2);
                 } 
 
                 player = (player == playerOne) ? playerTwo : playerOne;
@@ -191,17 +200,15 @@ public class RegularGame
 
         createBoard(board); 
 
-        if ((turn == 9) && !(checkWin(board, playerOne)) && !(checkWin(board, playerTwo)))
+        if ((turn == (move + 9)) && !(checkWin(board, playerOne)) && !(checkWin(board, playerTwo)))
         { 
             System.out.println("It's a draw!");
             log.addTie();
             log.addGame();
             log.printRecord();
-            return;
+            return 0;
         } 
-
-
-
+        return 0;
     }
     
 }

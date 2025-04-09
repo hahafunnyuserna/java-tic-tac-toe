@@ -33,11 +33,13 @@ class Main
         RegularGame standard = new RegularGame();
         
         boolean repeat = true;
+
+        int move = 0;
     
         System.out.println("Welcome!");
         while (repeat)
         {
-            standard.standardGame(log);
+            move = standard.standardGame(log, move);
             repeat = repeatGame();
     
         }
