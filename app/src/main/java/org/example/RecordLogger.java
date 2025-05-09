@@ -52,9 +52,7 @@ public class RecordLogger
         } catch (IOException exception) {
             System.out.println("ERROR: " + exception.getMessage());
         }
-    }
-
-    
+    }    
 }
 
 

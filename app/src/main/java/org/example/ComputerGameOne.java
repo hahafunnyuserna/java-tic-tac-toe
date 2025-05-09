@@ -2,7 +2,7 @@ package org.example;
 
 import java.util.Scanner;
 
-public class RegularGame
+public class ComputerGameOne
 {    
     public static Scanner scan;
 
@@ -76,6 +76,7 @@ public class RegularGame
 
     static boolean checkWin(char[][] board, char player)
     {
+        
         for (int i = 0; i < 3; i++)
         { 
             if ((board[i][0] == player) && (board[i][1] == player) 
@@ -106,8 +107,10 @@ public class RegularGame
         return false; 
     }
 
-    public int standardGame(RecordLogger log, int move)
+    public int computerGame(RecordLogger log, int move, int mod)
     {
+        int turnCount = 0;
+
         scan = new Scanner(System.in);
 
         System.out.println("\n\n\n\n\n");
@@ -154,6 +157,7 @@ public class RegularGame
         
         for (turn = turn; turn < (move + 9); turn++)
         { 
+            turnCount++;
             createBoard(board); 
 
             while (true)
@@ -186,11 +190,11 @@ public class RegularGame
                 log.printRecord();
 
                 return ((turn + 1) % 2);
-                } 
+            } 
 
-            player = (player == playerOne) ? playerTwo : playerOne;    
+            player = (player == playerOne) ? playerTwo : playerOne;
+
         } 
-        
 
         createBoard(board); 
 

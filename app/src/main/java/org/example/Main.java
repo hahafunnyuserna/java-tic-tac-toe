@@ -41,7 +41,6 @@ class Main
         {
             move = standard.standardGame(log, move);
             repeat = repeatGame();
-    
         }
 
         scan.close();

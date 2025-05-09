@@ -1,5 +1,5 @@
 Game Statistics:
-Games: 8
-Player 1 Wins: 5
-Player 2 Wins: 2
-Ties: 1
+Games: 1
+Player 1 Wins: 1
+Player 2 Wins: 0
+Ties: 0
