@@ -191,7 +191,6 @@ public class RegularGame
             player = (player == playerOne) ? playerTwo : playerOne;    
         } 
         
-
         createBoard(board); 
 
         if ((turn == (move + 9)) && !(checkWin(board, playerOne)) && !(checkWin(board, playerTwo)))

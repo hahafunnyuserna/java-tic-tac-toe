@@ -2,11 +2,8 @@ package org.example;
 
 import java.util.*;
 
-
 public class ComputerGame
 {
-    public char charOne;
-    public char charTwo;
     
     public char[][] board =
         {
@@ -119,13 +116,26 @@ public class ComputerGame
         return false; 
     }
 
-    public int randomGen(int numOne, int numTwo)
+    public int randomGenTwo(int numOne, int numTwo)
     {
         if (Math.random() > 0.5)
         {
             return numOne;
         } else {
             return numTwo;
+        }
+    }
+
+    public int randomGenTri(int numOne, int numTwo, int numThree)
+    {
+        if (Math.random() < 0.33)
+        {
+            return numOne;
+        } else if (Math.random() > 0.66)
+        {
+            return numTwo;
+        } else {
+            return numThree;
         }
     }
 
@@ -182,24 +192,41 @@ public class ComputerGame
 
         int turn;
         
-        for (turn = 0; turn <= 4; turn++)
+        for (turn = 0; turn <= 90; turn++)
         { 
-            turnCount++;
             
-            System.out.println("Turn " + turnCount); 
+            System.out.println("Turn " + (turnCount + 1)); 
 
             if (mod == 1)
             {
+                turnCount++;
                 player = (player == playerOne) ? playerTwo : playerOne;
                 oppo = (oppo == playerTwo) ? playerOne : playerTwo;
                 System.out.println("Computer player " + oppo + " has made a move.");
                 computerMove(oppo, player, turnCount);
+                createBoard(board);
             } else {
                 createBoard(board);
             }
 
-            
+            if (checkWin(board, oppo))
+            { 
+                System.out.println("\n\nPlayer " + oppo + " wins!"); 
+                createBoard(board); 
+                    
+                if (player == playerOne)
+                {
+                    log.addWin(1);
+                } else {
+                    log.addWin(0);
+                }
+                log.addGame();
+                log.printRecord();
 
+                return ((turn + 1) % 2);
+            } 
+
+            turnCount++;
             while (true)
             { 
                 row = moveOneCheck(player);
@@ -214,7 +241,6 @@ public class ComputerGame
             } 
 
             board[row][col] = player; 
-
 
             if (checkWin(board, player))
             { 
@@ -238,6 +264,7 @@ public class ComputerGame
 
             if (mod == 0)
             {
+                turnCount++;
                 player = (player == playerOne) ? playerTwo : playerOne;
                 oppo = (oppo == playerTwo) ? playerOne : playerTwo;
                 System.out.println("Computer player " + oppo + " has made a move.");
@@ -246,21 +273,35 @@ public class ComputerGame
                 createBoard(board);
             }
 
-            
+            if (checkWin(board, oppo))
+            { 
+                createBoard(board); 
+                System.out.println("\n\nPlayer " + oppo + " wins!"); 
+                    
+                if (player == playerOne)
+                {
+                    log.addWin(0);
+                } else {
+                    log.addWin(1);
+                }
+                log.addGame();
+                log.printRecord();
 
+                return ((turn + 1) % 2);
+            } 
+
+            if ((isFull(board)) && !(checkWin(board, playerOne)) && !(checkWin(board, playerTwo)))
+            { 
+                createBoard(board);
+                System.out.println("It's a draw!");
+                log.addTie();
+                log.addGame();
+                log.printRecord();
+                return 0;
+            } 
         } 
 
-        if ((isFull(board)) && !(checkWin(board, playerOne)) && !(checkWin(board, playerTwo)))
-        { 
-            createBoard(board);
-            System.out.println("It's a draw!");
-            log.addTie();
-            log.addGame();
-            log.printRecord();
-            return 0;
-        } 
         return 0;
-
     }
 
     public boolean isFull(char[][] board)
@@ -289,72 +330,67 @@ public class ComputerGame
     {
         if (turnCount == 1)
         {
-            boolean temp = true;
-            while (temp)
+            boolean cornFill = true;
+            while (cornFill)
             {
-                int randomOne = randomGen(0, 2);
-                int randomTwo = randomGen(0, 2);
-                if (board[randomOne][randomTwo] == ' ')
+                int one = randomGenTwo(0, 2);
+                int two = randomGenTwo(0, 2);
+                if (board[one][two] == ' ')
                 {
-                    board[randomOne][randomTwo] = bot;
-                    temp = false;
+                    board[one][two] = bot;
+                    cornFill = false;
+                }
+            }
+            return 0;
+        }
+
+        if ((turnCount == 2) && (board[1][1] == ' '))
+        {
+            board[1][1] = bot;
+            return 0;
+        } 
+        
+        if ((turnCount >= 3) || ((turnCount == 1)) && (board[1][1] != ' '))
+        {
+            boolean opportFill = true;
+            while (opportFill)
+            {
+                int one = randomGenTri(0, 1, 2);
+                int two = randomGenTri(0, 1, 2);
+                if (board[one][two] == ' ')
+                {
+                    board[one][two] = bot;
+                    if (checkWin(board, bot))
+                    {
+                        opportFill = false;
+                        return 0;
+                    } else {
+                        board[one][two] = human;
+                        if (checkWin(board, human))
+                        {
+                            opportFill = false;
+                            return 0;
+                        } else {
+                            board[one][two] = ' ';
+                            opportFill = false;
+                        }
+                    }
                 }
             }
             
-            return 0;
-        } else if ((turnCount == 2) && (board[1][1] == ' ')) {
-                board[1][1] = bot;
-        } else {
-            for (int i = 0; i < 3; i++)
+            boolean randomFill = true;
+            while (randomFill)
             {
-                if (board[i][1] == ' ')
+                int oneOne = randomGenTri(0, 1, 2);
+                int twoOne = randomGenTri(0, 1, 2);
+                if (board[oneOne][twoOne] == ' ')
                 {
-                    board[i][1] = bot;
-                    if (checkWin(board, bot))
-                    {
-                        return 0;
-                    } else {
-                        board[i][1] = human;
-                        if (checkWin(board, human))
-                        {
-                            board[i][1] = bot;
-                            return 0;  
-                        } else {
-                            board[i][1] = ' ';
-                        }
-                    }
-                }
-                
-                if (board[1][i] == ' ')
-                {
-                    board[1][i] = bot;
-                    if (checkWin(board, bot))
-                    {
-                        return 0;
-                    } else {
-                        board[1][i] = human;
-                        if (checkWin(board, human))
-                        {
-                            board[1][i] = bot;
-                            return 0;  
-                        } else {
-                            board[1][i] = ' ';
-                        }
-                    }
-                }
-
-                for (int j = 0; j < 3; j++)
-                {
-                    if (board[i][j] == ' ')
-                    {
-                        board[i][j] = bot;
-                        return 0;
-                    }
+                    board[oneOne][twoOne] = bot;
+                    randomFill = false;
                 }
             }
-
         }
-
+        
         return 0;
     }
 }
