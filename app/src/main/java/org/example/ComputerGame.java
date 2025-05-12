@@ -1,9 +1,20 @@
 package org.example;
 
-import java.util.Scanner;
+import java.util.*;
 
-public class ComputerGameOne
-{    
+
+public class ComputerGame
+{
+    public char charOne;
+    public char charTwo;
+    
+    public char[][] board =
+        {
+            { ' ', ' ', ' ' }, 
+            { ' ', ' ', ' ' }, 
+            { ' ', ' ', ' ' }
+        }; 
+
     public static Scanner scan;
 
     static void createBoard(char[][] board)
@@ -107,16 +118,26 @@ public class ComputerGameOne
         return false; 
     }
 
-    public int computerGame(RecordLogger log, int move, int mod)
+    public int randomGen(int numOne, int numTwo)
+    {
+        if (Math.random() > 0.5)
+        {
+            return numOne;
+        } else {
+            return numTwo;
+        }
+    }
+
+    public int computerGame(RecordLogger log, int mod)
     {
         int turnCount = 0;
 
         scan = new Scanner(System.in);
 
         System.out.println("\n\n\n\n\n");
+
         System.out.println("Please input the character for player 1:");
         char playerOne = scan.nextLine().charAt(0);
-        
         System.out.println("Please input the character for player 2:");
         char playerTwo = scan.nextLine().charAt(0);
         if ((playerTwo == playerOne))
@@ -135,30 +156,25 @@ public class ComputerGameOne
                 }
             }
         }
-
-        char[][] board =
-        {
-            { ' ', ' ', ' ' }, 
-            { ' ', ' ', ' ' }, 
-            { ' ', ' ', ' ' }
-        }; 
                                 
         char player = 'v';
+        char oppo = 'v';
         int row = 0;
         int col = 0;
 
-        int turn = move;
-        if (turn % 2 == 0)
-        {
-            player = playerOne;
-        } else {
-            player = playerTwo;
-        }
+        int turn;
         
-        for (turn = turn; turn < (move + 9); turn++)
+        for (turn = 0; turn <= 4; turn++)
         { 
-            turnCount++;
             createBoard(board); 
+
+            if (mod == 1)
+            {
+                turnCount++;
+                computerMove(player, oppo, turnCount);
+            }
+
+            turnCount++;
 
             while (true)
             { 
@@ -193,12 +209,19 @@ public class ComputerGameOne
             } 
 
             player = (player == playerOne) ? playerTwo : playerOne;
+            oppo = (player == playerTwo) ? playerOne : playerTwo;
+
+            if (mod == 0)
+            {
+                turnCount++;
+                computerMove(player, oppo, turnCount);
+            }
 
         } 
 
         createBoard(board); 
 
-        if ((turn == (move + 9)) && !(checkWin(board, playerOne)) && !(checkWin(board, playerTwo)))
+        if ((turn == 9) && !(checkWin(board, playerOne)) && !(checkWin(board, playerTwo)))
         { 
             System.out.println("It's a draw!");
             log.addTie();
@@ -206,6 +229,68 @@ public class ComputerGameOne
             log.printRecord();
             return 0;
         } 
+        return 0;
+
+    }
+
+    public int computerMove(char player, char oppo, int turnCount)
+    {
+        if (turnCount == 1)
+        {
+            board[randomGen(0, 2)][randomGen(0, 2)] = player;
+        } else if ((turnCount == 2) && (board[1][1] == ' ')) {
+                board[1][1] = player;
+        } else {
+            for (int i = 0; i < 3; i++)
+            {
+                if (board[i][1] == ' ')
+                {
+                    board[i][1] = player;
+                    if (checkWin(board, player))
+                    {
+                        return 0;
+                    } else {
+                        board[i][1] = oppo;
+                        if (checkWin(board, oppo))
+                        {
+                            board[i][1] = player;
+                            return 0;  
+                        } else {
+                            board[i][1] = ' ';
+                        }
+                    }
+                }
+                
+                if (board[1][i] == ' ')
+                {
+                    board[1][i] = player;
+                    if (checkWin(board, player))
+                    {
+                        return 0;
+                    } else {
+                        board[1][i] = oppo;
+                        if (checkWin(board, oppo))
+                        {
+                            board[1][i] = player;
+                            return 0;  
+                        } else {
+                            board[1][i] = ' ';
+                        }
+                    }
+                }
+
+                for (int j = 0; j < 3; j++)
+                {
+                    if (board[i][j] == ' ')
+                    {
+                        board[i][j] = player;
+                        return 0;
+                    }
+                }
+            }
+
+        }
+
         return 0;
     }
 }

@@ -31,24 +31,47 @@ class Main
         RecordLogger log = new RecordLogger();
 
         RegularGame standard = new RegularGame();
+        ComputerGame computer = new ComputerGame();
         
         boolean repeat = true;
 
         int move = 0;
     
         System.out.println("Welcome!");
+        
         while (repeat)
         {
-            move = standard.standardGame(log, move);
-            repeat = repeatGame();
-        }
+            System.out.println("Please select a game:\n2-Player Game - G\nComputer Game - C");
+            String game = scan.nextLine();
+            while (!(game.equalsIgnoreCase("g")) && !(game.equalsIgnoreCase("c")))
+            {
+                System.out.println("ERROR: Please select a valid option.");
+                game = scan.nextLine();
+            }
+
+            if (game.equalsIgnoreCase("g"))
+            {
+                System.out.println("Please select which player goes first:\nHuman - 1\nComputer - 2");
+                int compSelect = scan.nextInt();
+                while (!(compSelect.equals(1)) && !(game.equals(2)))
+                {
+                    System.out.println("ERROR: Please select a valid option.");
+                    compSelect = scan.nextInt();
+                }
+
+                move = computer.computerGame(log, compSelect);
+               
+
+            } else {
+                move = standard.standardGame(log, move);
+                
+            repeat = repeatGame;            
+            }
 
         scan.close();
 
         log.writeFile();
         System.out.println("Records printed at /app/log.txt.\nGoodbye.");
 
-        
-        
     }    
 }

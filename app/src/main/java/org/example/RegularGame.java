@@ -4,6 +4,13 @@ import java.util.Scanner;
 
 public class RegularGame
 {    
+    public char[][] board =
+        {
+            { ' ', ' ', ' ' }, 
+            { ' ', ' ', ' ' }, 
+            { ' ', ' ', ' ' }
+        }; 
+
     public static Scanner scan;
 
     static void createBoard(char[][] board)
@@ -133,12 +140,7 @@ public class RegularGame
             }
         }
 
-        char[][] board =
-        {
-            { ' ', ' ', ' ' }, 
-            { ' ', ' ', ' ' }, 
-            { ' ', ' ', ' ' }
-        }; 
+       
                                 
         char player = 'v';
         int row = 0;
