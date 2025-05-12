@@ -139,8 +139,6 @@ public class RegularGame
                 }
             }
         }
-
-       
                                 
         char player = 'v';
         int row = 0;

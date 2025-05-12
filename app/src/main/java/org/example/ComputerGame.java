@@ -38,6 +38,7 @@ public class ComputerGame
         scan = new Scanner(System.in);
         int move = 0;
         System.out.println("Player " + player + ", enter a row (0-2) to play:");
+        
         while (true)
         {
             if (scan.hasNextInt())
@@ -130,15 +131,23 @@ public class ComputerGame
 
     public int computerGame(RecordLogger log, int mod)
     {
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                board[i][j] = ' ';
+            }
+        }
+
         int turnCount = 0;
 
         scan = new Scanner(System.in);
 
         System.out.println("\n\n\n\n\n");
 
-        System.out.println("Please input the character for player 1:");
+        System.out.println("Please input the character for the human player:");
         char playerOne = scan.nextLine().charAt(0);
-        System.out.println("Please input the character for player 2:");
+        System.out.println("Please input the character for the computer player:");
         char playerTwo = scan.nextLine().charAt(0);
         if ((playerTwo == playerOne))
         {
@@ -146,7 +155,7 @@ public class ComputerGame
             {
                 if (playerTwo == playerOne)
                 {
-                    System.out.println("ERROR: Marker is identical to player 1.\nPlease input the character for player 2:");
+                    System.out.println("ERROR: Marker is identical to the human player.\nPlease input the character for the computer player:");
                 }
                 
                 playerTwo = scan.nextLine().charAt(0);
@@ -162,19 +171,34 @@ public class ComputerGame
         int row = 0;
         int col = 0;
 
+        if (mod == 0)
+        {
+            player = playerOne;
+            oppo = playerTwo;
+        } else {
+            player = playerTwo;
+            oppo = playerOne;
+        }
+
         int turn;
         
         for (turn = 0; turn <= 4; turn++)
         { 
-            createBoard(board); 
+            turnCount++;
+            
+            System.out.println("Turn " + turnCount); 
 
             if (mod == 1)
             {
-                turnCount++;
-                computerMove(player, oppo, turnCount);
+                player = (player == playerOne) ? playerTwo : playerOne;
+                oppo = (oppo == playerTwo) ? playerOne : playerTwo;
+                System.out.println("Computer player " + oppo + " has made a move.");
+                computerMove(oppo, player, turnCount);
+            } else {
+                createBoard(board);
             }
 
-            turnCount++;
+            
 
             while (true)
             { 
@@ -190,6 +214,7 @@ public class ComputerGame
             } 
 
             board[row][col] = player; 
+
 
             if (checkWin(board, player))
             { 
@@ -209,20 +234,25 @@ public class ComputerGame
             } 
 
             player = (player == playerOne) ? playerTwo : playerOne;
-            oppo = (player == playerTwo) ? playerOne : playerTwo;
+            oppo = (oppo == playerTwo) ? playerOne : playerTwo;
 
             if (mod == 0)
             {
-                turnCount++;
-                computerMove(player, oppo, turnCount);
+                player = (player == playerOne) ? playerTwo : playerOne;
+                oppo = (oppo == playerTwo) ? playerOne : playerTwo;
+                System.out.println("Computer player " + oppo + " has made a move.");
+                computerMove(oppo, player, turnCount);
+            } else {
+                createBoard(board);
             }
+
+            
 
         } 
 
-        createBoard(board); 
-
-        if ((turn == 9) && !(checkWin(board, playerOne)) && !(checkWin(board, playerTwo)))
+        if ((isFull(board)) && !(checkWin(board, playerOne)) && !(checkWin(board, playerTwo)))
         { 
+            createBoard(board);
             System.out.println("It's a draw!");
             log.addTie();
             log.addGame();
@@ -233,27 +263,61 @@ public class ComputerGame
 
     }
 
-    public int computerMove(char player, char oppo, int turnCount)
+    public boolean isFull(char[][] board)
+    {
+        int tally = 0;
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                if (board[i][j] != ' ')
+                {
+                    tally++;
+                }
+            }
+        }
+
+        if (tally == 9)
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public int computerMove(char bot, char human, int turnCount)
     {
         if (turnCount == 1)
         {
-            board[randomGen(0, 2)][randomGen(0, 2)] = player;
+            boolean temp = true;
+            while (temp)
+            {
+                int randomOne = randomGen(0, 2);
+                int randomTwo = randomGen(0, 2);
+                if (board[randomOne][randomTwo] == ' ')
+                {
+                    board[randomOne][randomTwo] = bot;
+                    temp = false;
+                }
+            }
+            
+            return 0;
         } else if ((turnCount == 2) && (board[1][1] == ' ')) {
-                board[1][1] = player;
+                board[1][1] = bot;
         } else {
             for (int i = 0; i < 3; i++)
             {
                 if (board[i][1] == ' ')
                 {
-                    board[i][1] = player;
-                    if (checkWin(board, player))
+                    board[i][1] = bot;
+                    if (checkWin(board, bot))
                     {
                         return 0;
                     } else {
-                        board[i][1] = oppo;
-                        if (checkWin(board, oppo))
+                        board[i][1] = human;
+                        if (checkWin(board, human))
                         {
-                            board[i][1] = player;
+                            board[i][1] = bot;
                             return 0;  
                         } else {
                             board[i][1] = ' ';
@@ -263,15 +327,15 @@ public class ComputerGame
                 
                 if (board[1][i] == ' ')
                 {
-                    board[1][i] = player;
-                    if (checkWin(board, player))
+                    board[1][i] = bot;
+                    if (checkWin(board, bot))
                     {
                         return 0;
                     } else {
-                        board[1][i] = oppo;
-                        if (checkWin(board, oppo))
+                        board[1][i] = human;
+                        if (checkWin(board, human))
                         {
-                            board[1][i] = player;
+                            board[1][i] = bot;
                             return 0;  
                         } else {
                             board[1][i] = ' ';
@@ -283,7 +347,7 @@ public class ComputerGame
                 {
                     if (board[i][j] == ' ')
                     {
-                        board[i][j] = player;
+                        board[i][j] = bot;
                         return 0;
                     }
                 }

@@ -41,6 +41,7 @@ class Main
         
         while (repeat)
         {
+            scan = new Scanner(System.in);
             System.out.println("Please select a game:\n2-Player Game - G\nComputer Game - C");
             String game = scan.nextLine();
             while (!(game.equalsIgnoreCase("g")) && !(game.equalsIgnoreCase("c")))
@@ -49,25 +50,25 @@ class Main
                 game = scan.nextLine();
             }
 
-            if (game.equalsIgnoreCase("g"))
+            if (game.equalsIgnoreCase("c"))
             {
                 System.out.println("Please select which player goes first:\nHuman - 1\nComputer - 2");
                 int compSelect = scan.nextInt();
-                while (!(compSelect.equals(1)) && !(game.equals(2)))
+                while (!(compSelect == 1) && !(compSelect == 2))
                 {
                     System.out.println("ERROR: Please select a valid option.");
                     compSelect = scan.nextInt();
                 }
+                compSelect--;
+                System.out.println(compSelect);
 
                 move = computer.computerGame(log, compSelect);
                
-
             } else {
                 move = standard.standardGame(log, move);
-                
-            repeat = repeatGame;            
             }
-
+            repeat = repeatGame();             
+        }
         scan.close();
 
         log.writeFile();
